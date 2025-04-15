@@ -1,20 +1,32 @@
+"use client";
 import React from "react";
 import { Title } from "./title";
-import { FilterCheckbox } from "./filter-checkbox";
+import { FilterCheckbox, FilterCheckboxProps } from "./filter-checkbox";
 import { Input } from "../ui";
 import { RangeSlider } from "./range-slider";
 import { CheckboxFiltersGroup } from "./checkbox-filters-group";
+import { useFilterIngredients } from "@/hooks/useFilterIngredients";
 
 interface Props {
   className?: string;
 }
+
 export const Filters: React.FC<Props> = ({ className }) => {
+  const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
+
+  const ingredientsList: FilterCheckboxProps[] = ingredients?.map((ing) => ({
+    id: ing.id,
+    text: ing.name,
+    value: String(ing.id),
+    name: "ingredient",
+  }));
+
   return (
     <div className={className}>
       <Title size="sm" text="Filtr" className="mb-5 font-bold" />
       <div className="flex flex-col gap-4">
-        <FilterCheckbox text="Można kombinować" value="1" />
-        <FilterCheckbox text="Nowości" value="2" />
+        <FilterCheckbox name="dop" text="Można kombinować" value="1" />
+        <FilterCheckbox name="dop" text="Nowości" value="2" />
       </div>
 
       <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
@@ -40,83 +52,12 @@ export const Filters: React.FC<Props> = ({ className }) => {
       <CheckboxFiltersGroup
         title={"Składniki"}
         className="mt-5"
-        items={[
-          {
-            text: "Syr",
-            value: "1",
-          },
-          {
-            text: "Mocarella",
-            value: "2",
-          },
-          {
-            text: "Czosnek",
-            value: "3",
-          },
-          {
-            text: "Cebula",
-            value: "4",
-          },
-          {
-            text: "Kiszony ogórek",
-            value: "5",
-          },
-          {
-            text: "Słonina",
-            value: "6",
-          },
-          {
-            text: "Grzyby",
-            value: "7",
-          },
-          {
-            text: "Czosnek",
-            value: "3",
-          },
-          {
-            text: "Cebula",
-            value: "4",
-          },
-          {
-            text: "Kiszony ogórek",
-            value: "5",
-          },
-          {
-            text: "Słonina",
-            value: "6",
-          },
-          {
-            text: "Grzyby",
-            value: "7",
-          },
-        ]}
-        defaultItems={[
-          {
-            text: "Syr",
-            value: "1",
-          },
-          {
-            text: "Mocarella",
-            value: "2",
-          },
-          {
-            text: "Czosnek",
-            value: "3",
-          },
-          {
-            text: "Cebula",
-            value: "4",
-          },
-          {
-            text: "Kiszony ogórek",
-            value: "5",
-          },
-          {
-            text: "Słonina",
-            value: "6",
-          },
-        ]}
+        items={ingredientsList}
+        defaultItems={ingredientsList.slice(0, 6)}
         limit={6}
+        onClickCheckbox={onAddId}
+        selectedIds={selectedIds}
+        loading={loading}
       />
     </div>
   );

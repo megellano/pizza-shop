@@ -34,6 +34,12 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
     [searchQuery]
   );
 
+  const onClickHendler = () => {
+    setFocused(false);
+    setSearchQuery("");
+    // setProducts([]);
+  };
+
   return (
     <>
       {focused && <Backdrop />}
@@ -60,7 +66,11 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
           )}
         >
           {products?.map((product, index) => (
-            <Link href={`/product/${product.id}`} key={index}>
+            <Link
+              href={`/product/${product.id}`}
+              key={index}
+              onClick={onClickHendler}
+            >
               <div className="px-3 py-0.5 hover:bg-primary/10 flex gap-2 items-center">
                 <Image
                   src={
